@@ -3,6 +3,7 @@
   "description": "Tôi là Metabot – trợ lý ảo của Metaverse Solution Vietnam. Hãy để tôi đồng hành cùng bạn!",
   "message_default": "👋 Bạn muốn tôi hỗ trợ gì hôm nay?",
   "chatbot_response": "Bạn vừa nói: \"{{message}}\". Tôi là Metabot bản mockup, đây chỉ là phản hồi mẫu để bạn test UI. 😄",
+  "attachments_title": "Tệp đính kèm",
   "drop_file_placeholder": "Thả tệp vào đây",
   "upload_files_title": "Tải lên tệp",
   "upload_files_description": "Nhấn hoặc kéo tệp vào khu vực này để tải lên",

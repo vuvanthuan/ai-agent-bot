@@ -13,6 +13,7 @@ const ChatbotHeader = () => {
             description={t('description')}
             style={{
                 padding: '16px',
+                boxShadow: '0 4px 10px 0 rgba(59, 130, 246, 0.3)'
             }}
         />
     );

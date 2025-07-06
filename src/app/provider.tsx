@@ -28,7 +28,7 @@ export default function Providers({ children }: ProvidersProps) {
                         locale={localeMap[i18n.language] || enUS}
                         theme={{
                             token: {
-                                colorPrimary: '#1677ff',
+                                colorPrimary: '#4682A9',
                                 borderRadius: 8,
                             },
                         }}

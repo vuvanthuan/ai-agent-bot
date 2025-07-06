@@ -33,24 +33,29 @@ const ChatbotX = () => {
     const senderRef = React.useRef<GetRef<typeof Sender>>(null);
 
     const [agent] = useXAgent<string, { message: string }, string>({
-        request: async ({ message }, { onSuccess, onUpdate }) => {
-            const mockResponse = t('chatbot_response', { message });
-            let current = '';
+        request: async ({ message }, { onSuccess, onUpdate, onError }) => {
+            try {
+                const mockResponse = t('chatbot_response', { message });
+                let current = '';
 
-            const interval = setInterval(() => {
-                current = mockResponse.slice(0, current.length + 2);
-                onUpdate(current);
+                const interval = setInterval(() => {
+                    current = mockResponse.slice(0, current.length + 2);
+                    onUpdate(current);
 
-                if (current === mockResponse) {
-                    clearInterval(interval);
-                    onSuccess([mockResponse]);
-                }
-            }, 50);
+                    if (current === mockResponse) {
+                        clearInterval(interval);
+                        onSuccess([mockResponse]);
+                    }
+                }, 50);
+            } catch (error: unknown) {
+                onError(error as Error);
+            }
         },
     });
 
     const { onRequest, messages } = useXChat({
-        agent, defaultMessages: [
+        agent,
+        defaultMessages: [
             {
                 id: 'init',
                 message: t('message_default'),
@@ -61,7 +66,7 @@ const ChatbotX = () => {
 
     const senderHeader = (
         <Sender.Header
-            title="Attachments"
+            title={t('attachments_title')}
             open={openSenderHeader}
             onOpenChange={setOpenSenderHeader}
             styles={{
