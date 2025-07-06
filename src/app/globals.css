@@ -32,7 +32,7 @@
 }
 
 .ant-sender {
-  position: sticky;
-  bottom: 0;
-  background: #fff;
+  position: sticky !important;
+  bottom: 0 !important;
+  background: #fff !important;
 }
