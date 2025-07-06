@@ -1,36 +1,35 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const allowedDomains = (process.env.ALLOWED_IFRAME_DOMAINS || '')
+  .split(',')
+  .map(d => d.trim())
+  .filter(Boolean);
 
-const allowedDomains = process.env.ALLOWED_IFRAME_DOMAINS || ''
-
-const nextConfig: NextConfig = {
-    reactStrictMode: true,
-    swcMinify: true,
-    eslint: {
-        ignoreDuringBuilds: true,
-    },
-    typescript: {
-        ignoreBuildErrors: true,
-    },
-    images: {
-        unoptimized: true,
-    },
-    async headers() {
-        return [
-            {
-                source: "/embed",
-                headers: [
-                    {
-                        key: "Content-Security-Policy",
-                        value: `frame-ancestors ${allowedDomains};`,
-                    },
-                    {
-                        key: "X-Frame-Options",
-                        value: `ALLOW-FROM ${allowedDomains}`,
-                    },
-                ],
-            },
-        ];
-    },
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  images: {
+    unoptimized: true,
+  },
+  async headers() {
+    const cspDomains = ['\'self\'', ...allowedDomains].join(' ');
+    return [
+      {
+        source: '/embed',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: `frame-ancestors ${cspDomains};`,
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
