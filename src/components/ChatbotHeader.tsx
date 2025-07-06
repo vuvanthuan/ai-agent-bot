@@ -8,7 +8,7 @@ const ChatbotHeader = () => {
 
     return (
         <Welcome
-            icon="http://localhost:3000/public/logo.png"
+            icon="https://metaverse-solution.vn/_next/image?url=%2Flogo.png&w=640&q=75"
             title={t('welcome')}
             description={t('description')}
             style={{

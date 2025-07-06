@@ -1,5 +1,12 @@
 {
-  "welcome": "Hello, I'm Metabot – your virtual assistant!",
-  "description": "I'm Metabot – the virtual assistant of Metaverse Solution Vietnam. Let me guide you through the intelligent virtual world, proudly powered by Vietnamese technology!",
-  "message_default": "👋 What can I help you with today?"
+  "welcome": "Hello,",
+  "description": "I'm Metabot – the virtual assistant of Metaverse Solution Vietnam. Let me guide you!",
+  "message_default": "👋 What can I help you with today?",
+  "chatbot_response": "You just said: \"{{message}}\". I am a mockup Metabot, this is a sample response for UI testing. 😄",
+  "drop_file_placeholder": "Drop file here",
+  "upload_files_title": "Upload files",
+  "upload_files_description": "Click or drag files to this area to upload",
+  "text_empty": "Text is empty",
+  "text_copied_success": "Text copied successfully",
+  "copy_failed": "Failed to copy, please try again"
 }

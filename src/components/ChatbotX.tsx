@@ -1,9 +1,10 @@
 'use client'
 
 import React from 'react';
-import { CloudUploadOutlined, LinkOutlined, UserOutlined } from '@ant-design/icons';
+import { CloudUploadOutlined, LinkOutlined, CopyOutlined, UserOutlined, SyncOutlined } from '@ant-design/icons';
 import { Attachments, AttachmentsProps, Bubble, Sender, useXAgent, useXChat } from '@ant-design/x';
-import { Button, Flex, GetRef, type GetProp } from 'antd';
+import { Button, Flex, GetRef, Space, theme, type GetProp } from 'antd';
+import useApp from 'antd/es/app/useApp';
 import { useTranslation } from "react-i18next";
 
 import ChatBotLogo from './ChatBotLogo';
@@ -15,12 +16,15 @@ const roles: GetProp<typeof Bubble.List, 'roles'> = {
     },
     local: {
         placement: 'end',
-        avatar: { icon: <UserOutlined />, style: { background: '#87d068' } },
+        avatar: { icon: <UserOutlined />, style: { background: '#456882' } },
     },
 };
 
 const ChatbotX = () => {
     const { t } = useTranslation();
+    const { token } = theme.useToken();
+    const { message } = useApp()
+
     const [content, setContent] = React.useState('');
     const [openSenderHeader, setOpenSenderHeader] = React.useState(false);
     const [items, setItems] = React.useState<GetProp<AttachmentsProps, 'items'>>([]);
@@ -30,7 +34,7 @@ const ChatbotX = () => {
 
     const [agent] = useXAgent<string, { message: string }, string>({
         request: async ({ message }, { onSuccess, onUpdate }) => {
-            const mockResponse = `Bạn vừa nói: "${message}". Tôi là Grok bản mockup, đây chỉ là phản hồi mẫu để bạn test UI. 😄`;
+            const mockResponse = t('chatbot_response', { message });
             let current = '';
 
             const interval = setInterval(() => {
@@ -74,18 +78,38 @@ const ChatbotX = () => {
                 placeholder={(type) =>
                     type === 'drop'
                         ? {
-                            title: 'Drop file here',
+                            title: t('drop_file_placeholder'),
                         }
                         : {
                             icon: <CloudUploadOutlined />,
-                            title: 'Upload files',
-                            description: 'Click or drag files to this area to upload',
+                            title: t('upload_files_title'),
+                            description: t('upload_files_description'),
                         }
                 }
                 getDropContainer={() => senderRef.current?.nativeElement}
             />
         </Sender.Header>
     );
+
+    const onCopy = async (textToCopy: string) => {
+        if (!textToCopy) return message.error(t('text_empty'));
+
+        try {
+            if (navigator.clipboard) {
+                await navigator.clipboard.writeText(textToCopy);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = textToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+            message.success(t('text_copied_success', { text: textToCopy }));
+        } catch {
+            message.error(t('copy_failed'));
+        }
+    };
 
     return (
         <Flex vertical gap="middle">
@@ -96,6 +120,18 @@ const ChatbotX = () => {
                     key: id,
                     role: status === 'local' ? 'local' : 'ai',
                     content: message,
+                    footer: status !== 'local' && (
+                        <Space size={token.paddingXXS}>
+                            <Button color="default" variant="text" size="small" icon={<SyncOutlined />} />
+                            <Button
+                                color="default"
+                                variant="text"
+                                size="small"
+                                onClick={() => onCopy(message)}
+                                icon={<CopyOutlined />}
+                            />
+                        </Space>
+                    )
                 }))}
             />
             <Sender
